@@ -26,6 +26,8 @@ defmodule EdwinInterview do
   end
 
   defp get_permutations(users, products) do
+    Permutations.start()
+
     1..length(users)
     |> Enum.to_list()
     |> Permutations.permute(length(products))
@@ -45,7 +47,32 @@ defmodule EdwinInterview do
 end
 
 defmodule Permutations do
+  use Agent
+
   def permute([], _), do: [[]]
   def permute(_, 0), do: [[]]
-  def permute(list, i), do: for(x <- list, y <- permute(list -- [x], i - 1), do: [x | y])
+  def permute(list, i), do: do_cached_permutation(list, i)
+
+  defp do_cached_permutation(list, i) do
+    cached_value = read_cache(list, i)
+
+    if cached_value do
+      cached_value
+    else
+      for(x <- list, y <- permute(list -- [x], i - 1), do: [x | y])
+      |> tap(&update_cache(list, i, &1))
+    end
+  end
+
+  ##### Memoization
+
+  def start do
+    Agent.start_link(fn -> %{} end, name: __MODULE__)
+  end
+
+  defp read_cache(list, i), do: Agent.get(__MODULE__, &Map.get(&1, {list, i}))
+
+  defp update_cache(list, i, value) do
+    Agent.update(__MODULE__, &Map.put(&1, {list, i}, value))
+  end
 end
