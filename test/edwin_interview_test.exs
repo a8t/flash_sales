@@ -1,6 +1,6 @@
-defmodule EdwinInterviewTest do
+defmodule FlashSalesTest do
   use ExUnit.Case, async: true
-  doctest EdwinInterview
+  doctest FlashSales
 
   # IO.inspect(for _num <- 1..16, do: for(_num <- 1..6, do: :rand.uniform(100) / 100))
 
@@ -26,9 +26,9 @@ defmodule EdwinInterviewTest do
 
     sum = (0.96 + 0.87 + 0.86 + 0.97) |> Float.round(2)
 
-    assert EdwinInterview.calc(
-             1..length(probability_matrix) |> Enum.to_list(),
-             1..length(Enum.at(probability_matrix, 0)) |> Enum.to_list(),
+    assert FlashSales.get_max_expected_value(
+             list_up_to(length(probability_matrix)),
+             list_up_to(length(Enum.at(probability_matrix, 0))),
              probability_matrix
            ) ==
              sum
@@ -44,9 +44,9 @@ defmodule EdwinInterviewTest do
 
     sum = (0.95 + 0.2 + 0.3) |> Float.round(2)
 
-    assert EdwinInterview.calc(
-             1..length(probability_matrix) |> Enum.to_list(),
-             1..length(Enum.at(probability_matrix, 0)) |> Enum.to_list(),
+    assert FlashSales.get_max_expected_value(
+             list_up_to(length(probability_matrix)),
+             list_up_to(length(Enum.at(probability_matrix, 0))),
              probability_matrix
            ) ==
              sum
@@ -74,11 +74,13 @@ defmodule EdwinInterviewTest do
 
     sum = (0.9 + 0.89 + 0.76 + 0.95 + 1.0 + 0.82) |> Float.round(2)
 
-    assert EdwinInterview.calc(
-             1..length(probability_matrix) |> Enum.to_list(),
-             1..length(Enum.at(probability_matrix, 0)) |> Enum.to_list(),
+    assert FlashSales.get_max_expected_value(
+             list_up_to(length(probability_matrix)),
+             list_up_to(length(Enum.at(probability_matrix, 0))),
              probability_matrix
            ) ==
              sum
   end
+
+  defp list_up_to(number), do: 1..number |> Enum.to_list()
 end

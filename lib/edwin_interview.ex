@@ -1,15 +1,27 @@
-defmodule EdwinInterview do
+defmodule FlashSales do
   @moduledoc """
-  Documentation for `EdwinInterview`.
+  Documentation for `FlashSales`.
   """
 
-  def calc(users, products, probability_matrix) do
+  @doc """
+  Given a list of users and products and a probability matrix,
+  find the optimal set of entries to maximize expected value
+
+  Returns a number.
+  """
+  def get_max_expected_value(users, products, probability_matrix) do
     get_permutations(users, products)
     |> Enum.map(&sum_permutation(&1, probability_matrix))
     |> Enum.max()
   end
 
-  def calc_with_permutation(users, products, probability_matrix) do
+  @doc """
+  Given a list of users and products and a probability matrix,
+  find the optimal set of entries to maximize expected value
+
+  Returns a tuple of a number and the permutation as a list.
+  """
+  def get_max_expected_value_with_permutation(users, products, probability_matrix) do
     {max, best_permutation} =
       get_permutations(users, products)
       |> Enum.reduce({0, nil}, fn current_permutation, {prev_max, prev_best} ->
